@@ -40,15 +40,17 @@ async function run() {
             plugins = await common.helper.processLineByLine(`${workspace}/${rulesFileLocation}`);
         }
 
-        
-        let command = (`pwd`);
-        let command3 = (`cd ${workspace}`);
-        let command2 = (`ls`);
+        await exec.exec(`docker pull ${docker_name} -q`);
+        let command = (`docker run --user root -v ${workspace}:/zap/wrk/:rw --network="host" ` +
+           `-t ${docker_name} zap.sh -cmd -quickurl ${target} -quickout ${htmlReportName}`);
+
+
+        if (plugins.length !== 0) {
+            command = command + ` -c ${rulesFileLocation}`
+        }
 
         try {
             await exec.exec(command);
-            await exec.exec(command3);
-            await exec.exec(command2);
         } catch (err) {
             if (err.toString().includes('exit code 3')) {
                 core.setFailed('failed to scan the target: ' + err.toString());
@@ -63,6 +65,7 @@ async function run() {
                 console.log('Scanning process completed, starting to analyze the results!')
             }
         }
+        // await common.main.processReport(token, workspace, plugins, currentRunnerID, issueTitle, repoName, createIssue);
     } catch (error) {
         core.setFailed(error.message);
     }
