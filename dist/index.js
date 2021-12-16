@@ -3829,10 +3829,12 @@ async function run() {
 
         
         let command = (`pwd`);
+        let command3 = (`cd ${workspace}`);
         let command2 = (`ls`);
 
         try {
             await exec.exec(command);
+            await exec.exec(command3);
             await exec.exec(command2);
         } catch (err) {
             if (err.toString().includes('exit code 3')) {
