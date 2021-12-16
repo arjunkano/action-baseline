@@ -40,25 +40,13 @@ async function run() {
             plugins = await common.helper.processLineByLine(`${workspace}/${rulesFileLocation}`);
         }
 
-        await exec.exec(`docker pull ${docker_name} -q`);
-        let command = (`docker run --user zap -v ${workspace}:/zap/wrk/:rw --network="host" ` +
-           `-t ${docker_name} zap.sh -cmd -quickurl ${target} -quickout ./${htmlReportName}`);
-        let command2 = (`docker run --user zap -v ${workspace}:/zap/wrk/:rw --network="host" ` +
-           `-t ${docker_name} pwd`);
-        let command3 = (`docker run --user zap -v ${workspace}:/zap/wrk/:rw --network="host" ` +
-           `-t ${docker_name} ls`);   
-        let command4 = (`docker run --user zap -v ${workspace}:/zap/wrk/:rw --network="host" ` +
-           `-t ${docker_name} cat /zap/./${htmlReportName}`);
-
-        if (plugins.length !== 0) {
-            command = command + ` -c ${rulesFileLocation}`
-        }
+        
+        let command = (`pwd`);
+        let command2 = (`ls`);
 
         try {
             await exec.exec(command);
             await exec.exec(command2);
-            await exec.exec(command3);
-            await exec.exec(command4);
         } catch (err) {
             if (err.toString().includes('exit code 3')) {
                 core.setFailed('failed to scan the target: ' + err.toString());
