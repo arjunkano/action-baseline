@@ -52,7 +52,7 @@ async function run() {
 
         try {
             await exec.exec(command);
-            await exec.exec(2);
+            await exec.exec(cmd2);
 
         } catch (err) {
             if (err.toString().includes('exit code 3')) {
