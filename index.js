@@ -42,7 +42,7 @@ async function run() {
 
         await exec.exec(`docker pull ${docker_name} -q`);
         let command = (`docker run --user zap -v ${workspace}:/zap/wrk/:rw --network="host" ` +
-           `-t ${docker_name} zap.sh -cmd -quickurl ${target} -quickout /zap/wrk/${htmlReportName}`);
+           `-t ${docker_name} zap.sh -cmd -quickurl ${target} -quickout ./wrk/${htmlReportName}`);
 
 
         if (plugins.length !== 0) {
