@@ -3831,7 +3831,7 @@ async function run() {
         let command = (`docker run --user root -v ${workspace}:/zap/wrk/:rw --network="host" ` +
            `-t ${docker_name} zap.sh -cmd -quickurl ${target} -quickout ./${htmlReportName}`);
         let command2 = (`docker run --user root -v ${workspace}:/zap/wrk/:rw --network="host" ` +
-           `-t ${docker_name} cat ./${htmlReportName}`);
+           `-t ${docker_name} cat /zap/./${htmlReportName}`);
 
         if (plugins.length !== 0) {
             command = command + ` -c ${rulesFileLocation}`
