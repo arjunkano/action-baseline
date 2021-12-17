@@ -3831,7 +3831,8 @@ async function run() {
         let command = (`docker run --user root -v ${workspace}:/zap/wrk/:rw --network="host" ` +
            `-t ${docker_name} zap.sh -cmd -quickurl ${target} -quickout ./wrk/${htmlReportName}`);
         
-        let cmd2 = `cat ${workspace}/${htmlReportName}`
+        let cmd2 = `cat  ${workspace}/${htmlReportName}`
+        let cmd3 = `if [ "$(grep -c "Medium" ${workspace}/${htmlReportName})" -gt 1 ]; then exit 2; fi`
 
         if (plugins.length !== 0) {
             command = command + ` -c ${rulesFileLocation}`
@@ -3839,7 +3840,7 @@ async function run() {
 
         try {
             await exec.exec(command);
-            await exec.exec(cmd2);
+            await exec.exec(cmd3);
 
         } catch (err) {
             if (err.toString().includes('exit code 3')) {
