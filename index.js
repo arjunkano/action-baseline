@@ -60,9 +60,9 @@ async function run() {
             console.log('Scanning process completed..........');
             await exec.exec(cmd2);
             console.log('Grant access completed..........');
-            await exec.exec(cmd4);
-            await exec.exec(cmd3);
-            console.log('No errors encountered..........');
+            // await exec.exec(cmd4);
+            // await exec.exec(cmd3);
+            // console.log('No errors encountered..........');
         } catch (err) {
             if (err.toString().includes('exit code 3')) {
                 core.setFailed('failed to scan the target: ' + err.toString());
