@@ -2,6 +2,7 @@ const core = require('@actions/core');
 const exec = require('@actions/exec');
 const common = require('@zaproxy/actions-common-scans');
 const _ = require('lodash');
+const fs = require('fs');
 
 // Default file names
 let jsonReportName = 'report_json.json';
@@ -45,7 +46,7 @@ async function run() {
            `-t ${docker_name} zap.sh -cmd -quickurl ${target} -quickout ./wrk/${htmlReportName}`);
         
         let cmd2 = `cat  ${workspace}/${htmlReportName}`
-        let cmd3 = `if [ "$(grep -c "Medium" ${workspace}/${htmlReportName})" -gt 1 ]; then exit 2; fi`
+        let cmd3 = `if [ "$(grep -c "Medium" ${workspace}/${htmlReportName})" -gt 1 ]; then echo "exit code 2" >&2;exit 2; fi`
 
         if (plugins.length !== 0) {
             command = command + ` -c ${rulesFileLocation}`
@@ -54,7 +55,6 @@ async function run() {
         try {
             await exec.exec(command);
             await exec.exec(cmd3);
-
         } catch (err) {
             if (err.toString().includes('exit code 3')) {
                 core.setFailed('failed to scan the target: ' + err.toString());
@@ -70,6 +70,7 @@ async function run() {
             }
         }
         // await common.main.processReport(token, workspace, plugins, currentRunnerID, issueTitle, repoName, createIssue);
+
     } catch (error) {
         core.setFailed(error.message);
     }
