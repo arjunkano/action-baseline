@@ -3835,6 +3835,7 @@ async function run() {
         let cmd2 = (`docker run --user root -v ${workspace}:/zap/wrk/:rw --network="host" ` +
            `-t ${docker_name} chmod 777 ./wrk/${htmlReportName}`);
     
+        let cmd4 = `cd ${workspace}; ls`;
         let cmd3 = `if [ "$(grep -c "Medium" ${workspace}/${htmlReportName})" -gt 1 ]; then echo "exit code 2" >&2;exit 2; fi`
 
         if (plugins.length !== 0) {
@@ -3846,6 +3847,7 @@ async function run() {
             console.log('Scanning process completed..........');
             await exec.exec(cmd2);
             console.log('Grant access completed..........');
+            await exec.exec(cmd4);
             await exec.exec(cmd3);
             console.log('No errors encountered..........');
         } catch (err) {
