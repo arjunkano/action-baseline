@@ -3832,7 +3832,7 @@ async function run() {
         let command = (`docker run --user root -v ${workspace}:/zap/wrk/:rw --network="host" ` +
            `-t ${docker_name} zap.sh -cmd -quickurl ${target} -quickout ./wrk/${htmlReportName}`);
         
-        let cmd2 = `cat  ${workspace}/${htmlReportName}`
+        let cmd2 = `chmod 777  ${workspace}/${htmlReportName}`
         let cmd3 = `if [ "$(grep -c "Medium" ${workspace}/${htmlReportName})" -gt 1 ]; then echo "exit code 2" >&2;exit 2; fi`
 
         if (plugins.length !== 0) {
@@ -3841,7 +3841,11 @@ async function run() {
 
         try {
             await exec.exec(command);
+            console.log('Scanning process completed..........');
+            await exec.exec(cmd2);
+            console.log('Grant access completed..........');
             await exec.exec(cmd3);
+            console.log('No errors encountered..........');
         } catch (err) {
             if (err.toString().includes('exit code 3')) {
                 core.setFailed('failed to scan the target: ' + err.toString());
