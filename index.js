@@ -45,7 +45,9 @@ async function run() {
         let command = (`docker run --user root -v ${workspace}:/zap/wrk/:rw --network="host" ` +
            `-t ${docker_name} zap.sh -cmd -quickurl ${target} -quickout ./wrk/${htmlReportName}`);
         
-        let cmd2 = `chmod 777  ${workspace}/${htmlReportName}`
+        let cmd2 = (`docker run --user root -v ${workspace}:/zap/wrk/:rw --network="host" ` +
+           `-t ${docker_name} chmod 777 ./wrk/${htmlReportName}`);
+    
         let cmd3 = `if [ "$(grep -c "Medium" ${workspace}/${htmlReportName})" -gt 1 ]; then echo "exit code 2" >&2;exit 2; fi`
 
         if (plugins.length !== 0) {
