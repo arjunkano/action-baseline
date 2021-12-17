@@ -3853,6 +3853,7 @@ async function run() {
                 console.log(`[info] By default ZAP Docker container will fail if it identifies any alerts during the scan!`);
                 core.setFailed('Scan action failed as ZAP has identified alerts, starting to analyze the results. ' + err.toString());
             }else {
+                console.log(">>>>>>>>>>" + err.toString());
                 console.log('Scanning process completed, starting to analyze the results!')
             }
         }
